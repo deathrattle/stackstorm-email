@@ -1,0 +1,5 @@
+---
+name: "actionchain"
+runner_type: "action-chain"
+entry_point: "chains/actionchain.yaml"
+enabled: true
