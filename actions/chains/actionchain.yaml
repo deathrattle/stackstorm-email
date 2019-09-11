@@ -1,1 +1,35 @@
 
+---
+    chain:
+        -
+            name: "c1"
+            ref: "azure_vm.create_vm"
+            parameters:
+                 Subcription_id: '2f50f202-0a84-4c8c-a929-fcc5a3174590'
+                 Group_Name: '{{trigger.group}}'
+                 Location: '{{trigger.location}}'
+                 VM_Name: '{{trigger.vmname}}'
+                 Client_Id: '7aae3fd9-9324-463f-89f5-7c4144971bfb'
+                 Secret: 'MJOJszdQ2fl]xYQQ5Lm+]hAM2vgR0e+5'
+                 Tenant_Id:  'd5656af4-b7b3-45b9-9346-fb0547921fb7'
+            on-success: "c2"
+            on-failure: "c4"
+        -
+            name: "c2"
+            ref: "core.local"
+            parameters:
+                cmd: "echo hi"
+            on-success: "c3"
+            on-failure: "c4"
+        -
+            name: "c3"
+            ref: "core.local"
+            parameters:
+                cmd: "echo action compleated"
+            on-failure: "c4"
+        -
+            name: "c4"
+            ref: "core.local"
+            parameters:
+                cmd: "echo fail c4"
+    default: "c1"
