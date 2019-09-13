@@ -112,11 +112,9 @@ class IMAPSensor(PollingSensor):
             self._process_message(uid=message.uid, mailbox=mailbox,                                  
                                   mailbox_metadata=mailbox_metadata)
 
-    def _process_message(self, uid, mailbox, mailbox_metadata):
-        m=[]
+    def _process_message(self, uid, mailbox, mailbox_metadata):        
         message = mailbox.mail(uid, include_raw=True)
         mime_msg = mime.from_string(message.raw)
-
         body = message.body
         sent_from = message.from_addr
         sent_to = message.to
@@ -124,14 +122,7 @@ class IMAPSensor(PollingSensor):
         date = message.date
         message_id = message.message_id
         headers = mime_msg.headers.items()      
-        x=body.splitlines()
-        for x1 in x:
-          res=x1.split('=')
-          m.append(res[1])
-        location=m[0]
-        vmname=m[1]
-        group=m[2] 
-
+ 
         # Flatten the headers so they can be unpickled
         headers = self._flattern_headers(headers=headers)
 
@@ -144,10 +135,7 @@ class IMAPSensor(PollingSensor):
             'subject': subject,
             'message_id': message_id,
             'body': body,          
-            'mailbox_metadata': mailbox_metadata,
-            'location': location,
-            'vmname': vmname,
-            'group': group
+            'mailbox_metadata': mailbox_metadata         
         }    
 
         self._sensor_service.dispatch(trigger=self._trigger, payload=payload)
