@@ -1,10 +1,8 @@
 import hashlib
 import base64
-
 import six
 import easyimap
 from flanker import mime
-
 from st2reactor.sensor.base import PollingSensor
 
 __all__ = [
