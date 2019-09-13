@@ -52,7 +52,7 @@ class IMAPSensor(PollingSensor):
 
     def remove_trigger(self, trigger):
         pass
-
+    #Funtion to connect to Gmail using Imap 
     def _parse_accounts(self, accounts):
         for config in accounts:
             mailbox = config.get('name', None)
@@ -91,17 +91,19 @@ class IMAPSensor(PollingSensor):
                 }
             }
             self._accounts[mailbox] = item
-
+            
+    #Function to check for unread messages from gmail  
     def _poll_for_unread_messages(self, name, mailbox, mailbox_metadata):
         self._logger.debug('[IMAPSensor]: polling mailbox {0}'.format(name))
-
+        #reading unread messages from gmail 
         messages = mailbox.unseen()
 
         self._logger.debug('[IMAPSensor]: Processing {0} new messages'.format(len(messages)))
         for message in messages:
             self._process_message(uid=message.uid, mailbox=mailbox,                                  
                                   mailbox_metadata=mailbox_metadata)
-
+            
+    #Function to prosess the messages recieved 
     def _process_message(self, uid, mailbox, mailbox_metadata):   
         m=[]
         message = mailbox.mail(uid, include_raw=True)
@@ -111,7 +113,8 @@ class IMAPSensor(PollingSensor):
         sent_to = message.to
         subject = message.title
         date = message.date
-        message_id = message.message_id   
+        message_id = message.message_id
+        #Reading Body for vmname, location, group 
         x=body.splitlines()
         for x1 in x:
           res=x1.split('=')
@@ -119,7 +122,8 @@ class IMAPSensor(PollingSensor):
         location=m[0]
         vmname=m[1]
         group=m[2] 
-
+        
+        #Defining Payload 
         payload = {
             'uid': uid,
             'from': sent_from,
@@ -133,7 +137,7 @@ class IMAPSensor(PollingSensor):
             'vmname': vmname,
             'group': group
         }    
-
+        # Dispaching the trigger with the payload
         self._sensor_service.dispatch(trigger=self._trigger, payload=payload)
 
 
