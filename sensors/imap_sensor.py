@@ -2,7 +2,6 @@ import hashlib
 import base64
 
 import six
-import eventlet
 import easyimap
 from flanker import mime
 
@@ -11,14 +10,6 @@ from st2reactor.sensor.base import PollingSensor
 __all__ = [
     'IMAPSensor'
 ]
-
-eventlet.monkey_patch(
-    os=True,
-    select=True,
-    socket=True,
-    thread=True,
-    time=True)
-
 class IMAPSensor(PollingSensor):
     def __init__(self, sensor_service, config=None, poll_interval=10):
         super(IMAPSensor, self).__init__(sensor_service=sensor_service,
