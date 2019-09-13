@@ -8,8 +8,9 @@ from st2reactor.sensor.base import PollingSensor
 __all__ = [
     'IMAPSensor'
 ]
+
 class IMAPSensor(PollingSensor):
-    def __init__(self, sensor_service, config=None, poll_interval=10):
+    def __init__(self, sensor_service, config=None, poll_interval=5):
         super(IMAPSensor, self).__init__(sensor_service=sensor_service,
                                          config=config,
                                          poll_interval=poll_interval)
