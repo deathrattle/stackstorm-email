@@ -13,4 +13,4 @@ criteria:
 action:
   ref: core.local 
   parameters:
-    cmd: echo '{{trigger.subject}}'
+    cmd: echo '{{trigger.location}}'
