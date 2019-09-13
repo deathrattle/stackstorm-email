@@ -12,12 +12,14 @@ from st2common.runners.base_action import Action
 class MyEchoAction(Action):
 
     def run(self, Subcription_id, Group_Name, Location, VM_Name, Client_Id, Secret, Tenant_Id):
-
+        
+        #Defining Variables for VM creation 
         SUBSCRIPTION_ID = Subcription_id
         GROUP_NAME = Group_Name
         LOCATION = Location
         VM_NAME = VM_Name
-
+        
+        #Function for Creation Availability Set for Virtual Machine 
         def create_availability_set(compute_client):
             avset_params = {
                 'location': LOCATION,
@@ -29,14 +31,16 @@ class MyEchoAction(Action):
                 'myAVSet',
                 avset_params
             )
-
+            
+        #Function for Creation Group for Virtual Machine 
         def create_resource_group(resource_group_client):
             resource_group_params = {'location': LOCATION}
             resource_group_result = resource_group_client.resource_groups.create_or_update(
                 GROUP_NAME,
                 resource_group_params
             )
-
+            
+        #Function to get credentials for Authentication 
         def get_credentials():
             credentials = ServicePrincipalCredentials(
                 client_id=Client_Id,
@@ -44,7 +48,8 @@ class MyEchoAction(Action):
                 tenant=Tenant_Id
             )
             return credentials
-
+        
+        #Function To create Public IP address  
         def create_public_ip_address(network_client):
             public_ip_addess_params = {
                 'location': LOCATION,
@@ -56,7 +61,7 @@ class MyEchoAction(Action):
                 public_ip_addess_params
             )
             return creation_result.result()
-
+        #Function to create Vnet for virtual machine  
         def create_vnet(network_client):
             vnet_params = {
                 'location': LOCATION,
@@ -70,7 +75,8 @@ class MyEchoAction(Action):
                 vnet_params
             )
             return creation_result.result()
-
+        
+        #Function to create Subnet for virtual machine 
         def create_subnet(network_client):
             subnet_params = {
                 'address_prefix': '10.0.0.0/24'
@@ -82,7 +88,8 @@ class MyEchoAction(Action):
                 subnet_params
             )
             return creation_result.result()
-
+        
+        #Function to create nic for virtual machine 
         def create_nic(network_client):
             subnet_info = network_client.subnets.get(
                 GROUP_NAME,
@@ -109,7 +116,8 @@ class MyEchoAction(Action):
                 nic_params
             )
             return creation_result.result()
-
+        
+        #Function to create the virtual machine using above resources 
         def create_vm(network_client, compute_client):
             nic = network_client.network_interfaces.get(
                 GROUP_NAME,
@@ -154,6 +162,8 @@ class MyEchoAction(Action):
             return creation_result.result()
 
         credentials = get_credentials()
+        
+        #Defining Management Clients for creating and managing resources for azure 
         resource_group_client = ResourceManagementClient(
             credentials,
             SUBSCRIPTION_ID
@@ -166,7 +176,7 @@ class MyEchoAction(Action):
             credentials,
             SUBSCRIPTION_ID
         )
-
+        #Calling all above defined function to create resources and finally Virtual Machine 
         create_resource_group(resource_group_client)
         create_availability_set(compute_client)
         creation_result = create_public_ip_address(network_client)
