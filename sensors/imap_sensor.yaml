@@ -9,8 +9,9 @@ trigger_types:
     payload_info:
       - uid
       - from
-      - to      
-      - subject
+      - to   
       - date
+      - subject
       - message_id
       - body      
+      - mailbox_metadata
