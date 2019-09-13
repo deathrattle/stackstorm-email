@@ -7,5 +7,3 @@ imap_accounts:
     secure: true
     server: "imap.example.com"
     username: "me@example.com" 
-max_attachment_size: 1024
-attachment_datastore_ttl: 1800
