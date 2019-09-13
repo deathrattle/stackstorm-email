@@ -111,17 +111,12 @@ class IMAPSensor(PollingSensor):
         sent_to = message.to
         subject = message.title
         date = message.date
-        message_id = message.message_id
-        headers = mime_msg.headers.items()      
- 
-        # Flatten the headers so they can be unpickled
-        headers = self._flattern_headers(headers=headers)
+        message_id = message.message_id   
 
         payload = {
             'uid': uid,
             'from': sent_from,
-            'to': sent_to,
-            'headers': headers,
+            'to': sent_to,           
             'date': date,
             'subject': subject,
             'message_id': message_id,
@@ -131,18 +126,4 @@ class IMAPSensor(PollingSensor):
 
         self._sensor_service.dispatch(trigger=self._trigger, payload=payload)
 
-    def _flattern_headers(self, headers):
-        # Flattern headers and make sure they only contain simple types so they
-        # can be serialized in a trigger
-        result = []
 
-        for pair in headers:
-            name = pair[0]
-            value = pair[1]
-
-            if not isinstance(value, six.string_types):
-                value = str(value)
-
-            result.append([name, value])
-
-        return result
