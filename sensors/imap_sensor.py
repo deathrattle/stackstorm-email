@@ -118,8 +118,7 @@ class IMAPSensor(PollingSensor):
             'date': date,
             'subject': subject,
             'message_id': message_id,
-            'body': body,          
-            'mailbox_metadata': mailbox_metadata         
+            'body': body                
         }    
 
         self._sensor_service.dispatch(trigger=self._trigger, payload=payload)
