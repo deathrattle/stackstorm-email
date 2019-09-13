@@ -15,6 +15,3 @@ trigger_types:
       - date
       - message_id
       - body      
-      - location
-      - vmname
-      - group
