@@ -1,11 +1,10 @@
 import sys
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import hashlib
+import easyimap
 import base64
-
 import six
 import eventlet
-import easyimap
 from flanker import mime
 
 from st2reactor.sensor.base import PollingSensor
