@@ -1,4 +1,5 @@
-
+import sys
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import hashlib
 import base64
 
